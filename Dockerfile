@@ -1,5 +1,5 @@
-# Use the official .NET 8.0 SDK image for building
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+# Use the official .NET 9.0 SDK image for building
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
 
 # Copy csproj files and restore dependencies
@@ -21,8 +21,8 @@ RUN dotnet build -c Release --no-restore
 # Publish the application
 RUN dotnet publish RotaryClubManager.API/RotaryClubManager.API.csproj -c Release -o /app/publish --no-restore
 
-# Use the official .NET 8.0 runtime image for running
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+# Use the official .NET 9.0 runtime image for running
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 
 # Install curl for health checks (optional)
