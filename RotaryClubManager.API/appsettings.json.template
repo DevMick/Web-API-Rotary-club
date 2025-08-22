@@ -1,0 +1,83 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=YOUR_HOST;Port=YOUR_PORT;Database=YOUR_DATABASE;Username=YOUR_USERNAME;Password=YOUR_PASSWORD;SSL Mode=Require"
+  },
+  "JwtSettings": {
+    "Secret": "YOUR_JWT_SECRET_KEY_MINIMUM_32_CHARACTERS",
+    "Issuer": "RotaryClubManager",
+    "Audience": "RotaryClubManagerClient",
+    "AccessTokenExpiration": 60,
+    "RefreshTokenExpiration": 1440
+  },
+  "Email": {
+    "SmtpHost": "YOUR_SMTP_HOST",
+    "SmtpPort": 465,
+    "SmtpUser": "YOUR_EMAIL@domain.com",
+    "SmtpPassword": "YOUR_EMAIL_PASSWORD",
+    "FromEmail": "YOUR_EMAIL@domain.com",
+    "FromName": "Rotary Club Manager",
+    "EnableSsl": true,
+    "UseSecureConnection": true,
+    "MaxRecipients": 100,
+    "MaxMessageLength": 10000,
+    "MaxSubjectLength": 200,
+    "MaxAttachments": 5,
+    "MaxAttachmentSizeMB": 10,
+    "ReplyToEmail": "YOUR_EMAIL@domain.com",
+    "Templates": {
+      "WelcomeEmail": "templates/welcome.html",
+      "EventNotification": "templates/event-notification.html",
+      "MeetingReminder": "templates/meeting-reminder.html"
+    }
+  },
+  "Meta": {
+    "AppId": "YOUR_META_APP_ID",
+    "PhoneNumberId": "YOUR_PHONE_NUMBER_ID",
+    "WhatsAppBusinessAccountId": "YOUR_WHATSAPP_BUSINESS_ACCOUNT_ID",
+    "AccessToken": "YOUR_META_ACCESS_TOKEN",
+    "TestNumber": "+1234567890",
+    "WebhookVerifyToken": "YOUR_WEBHOOK_VERIFY_TOKEN",
+    "ApiVersion": "v18.0",
+    "WebhookUrl": "https://your-domain.com/api/metawhatsapp/webhook"
+  },
+  "ApiSettings": {
+    "BaseUrl": "http://localhost:5265"
+  },
+  "CalendarService": {
+    "JwtToken": "YOUR_CALENDAR_JWT_TOKEN",
+    "AdminToken": "YOUR_CALENDAR_ADMIN_TOKEN"
+  },
+  "DefaultClubId": "YOUR_DEFAULT_CLUB_ID",
+  "RateLimit": {
+    "Email": {
+      "PermitLimit": 10,
+      "WindowMinutes": 1,
+      "QueueLimit": 5
+    },
+    "WhatsApp": {
+      "PermitLimit": 80,
+      "WindowMinutes": 1,
+      "QueueLimit": 10
+    }
+  },
+  "CORS": {
+    "AllowedOrigins": [
+      "https://snack.expo.dev",
+      "http://localhost:*",
+      "exp://192.168.*.*:*"
+    ]
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning",
+      "Microsoft.EntityFrameworkCore.Database.Command": "Information",
+      "Microsoft.EntityFrameworkCore.Infrastructure": "Information",
+      "Microsoft.EntityFrameworkCore.Update": "Information",
+      "RotaryClubManager.Infrastructure.Services.EmailService": "Debug",
+      "RotaryClubManager.Infrastructure.Services.MetaWhatsAppService": "Debug",
+      "RotaryClubManager.Infrastructure.Services.CalendarDataService": "Debug"
+    }
+  },
+  "AllowedHosts": "*"
+}
