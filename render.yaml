@@ -1,0 +1,51 @@
+services:
+  - type: web
+    name: rotary-club-api
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    branch: master
+    healthCheckPath: /health
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://+:8080
+      - key: ConnectionStrings__DefaultConnection
+        fromDatabase:
+          name: rotary-club-db
+          property: connectionString
+      - key: JwtSettings__Secret
+        generateValue: true
+      - key: JwtSettings__Issuer
+        value: RotaryClubManager
+      - key: JwtSettings__Audience
+        value: RotaryClubManagerClient
+      - key: Email__SmtpHost
+        value: smtp.gmail.com
+      - key: Email__SmtpPort
+        value: 587
+      - key: Email__SmtpUser
+        sync: false
+      - key: Email__SmtpPassword
+        sync: false
+      - key: Email__FromEmail
+        sync: false
+      - key: Meta__AppId
+        sync: false
+      - key: Meta__PhoneNumberId
+        sync: false
+      - key: Meta__WhatsAppBusinessAccountId
+        sync: false
+      - key: Meta__AccessToken
+        sync: false
+      - key: Meta__WebhookVerifyToken
+        generateValue: true
+
+databases:
+  - name: rotary-club-db
+    databaseName: rotaryclub
+    user: rotaryclub_user
+    plan: free
+    region: oregon

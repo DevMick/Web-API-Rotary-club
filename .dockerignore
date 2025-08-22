@@ -1,0 +1,59 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+*.md
+
+# Docker
+Dockerfile*
+.dockerignore
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+bin/
+obj/
+out/
+publish/
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+
+# Test results
+TestResults/
+*.trx
+*.coverage
+
+# Logs
+logs/
+*.log
+
+# Runtime files
+*.pid
+*.seed
+*.pid.lock
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db

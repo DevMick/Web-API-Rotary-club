@@ -1,0 +1,60 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+      
+    - name: Test
+      run: dotnet test --no-build --configuration Release --verbosity normal
+      
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Build Docker image
+      run: docker build -t rotary-club-api .
+      
+    - name: Test Docker image
+      run: |
+        docker run -d -p 8080:8080 --name test-container \
+          -e ConnectionStrings__DefaultConnection="Host=localhost;Port=5432;Database=test;Username=test;Password=test" \
+          -e JwtSettings__Secret="test-secret-key-must-be-at-least-32-characters-long" \
+          rotary-club-api
+        sleep 10
+        docker logs test-container
+        docker stop test-container
+        docker rm test-container
+
+  notify-render:
+    runs-on: ubuntu-latest
+    needs: [test, docker-build]
+    if: github.ref == 'refs/heads/master'
+    
+    steps:
+    - name: Notify Render of deployment
+      run: |
+        echo "✅ Tests passed! Render will automatically deploy from master branch."
+        echo "🔗 Check your deployment at: https://dashboard.render.com"

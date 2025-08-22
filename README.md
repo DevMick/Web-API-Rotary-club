@@ -1,6 +1,8 @@
-# Rotary Club Manager API
+# 🎯 Rotary Club Manager API
 
-Une API complète pour la gestion des clubs Rotary, développée en .NET 8 avec Entity Framework Core et PostgreSQL.
+Une API complète pour la gestion des clubs Rotary, développée en .NET 8 avec Entity Framework Core et PostgreSQL. **Déployable gratuitement sur Render !**
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
 
 ## 🚀 Fonctionnalités
 
@@ -12,73 +14,130 @@ Une API complète pour la gestion des clubs Rotary, développée en .NET 8 avec 
 - **Communications** : Email, WhatsApp, notifications
 - **Multi-tenant** : Support de plusieurs clubs
 
-## 🛠️ Technologies utilisées
+## 🛠️ Stack Technique
 
 - **.NET 8** - Framework principal
 - **Entity Framework Core** - ORM
 - **PostgreSQL** - Base de données
 - **JWT** - Authentification
+- **Docker** - Containerisation
 - **Swagger/OpenAPI** - Documentation API
-- **AutoMapper** - Mapping d'objets
-- **FluentValidation** - Validation des données
 
-## 📋 Prérequis
+## 🌐 Déploiement sur Render (GRATUIT)
 
+### Option 1 : Déploiement automatique (Recommandé)
+
+1. **Fork ce repository** sur votre compte GitHub
+
+2. **Connectez-vous à [Render](https://render.com)** avec votre compte GitHub
+
+3. **Créez un nouveau Web Service** :
+   - Sélectionnez votre fork du repository
+   - Choisissez la branche `master`
+   - Render détectera automatiquement le `Dockerfile`
+
+4. **Configuration automatique** :
+   - Le fichier `render.yaml` configure automatiquement :
+     - Base de données PostgreSQL gratuite
+     - Variables d'environnement
+     - Health checks
+
+5. **Variables d'environnement à configurer** :
+   ```
+   Email__SmtpUser=your-email@gmail.com
+   Email__SmtpPassword=your-app-password
+   Email__FromEmail=your-email@gmail.com
+   Meta__AppId=your-meta-app-id
+   Meta__PhoneNumberId=your-phone-number-id
+   Meta__AccessToken=your-meta-access-token
+   ```
+
+### Option 2 : Déploiement manuel
+
+1. **Clonez le repository** :
+   ```bash
+   git clone https://github.com/DevMick/Web-API-Rotary-club.git
+   cd Web-API-Rotary-club
+   ```
+
+2. **Créez un Web Service sur Render** :
+   - Environment: `Docker`
+   - Build Command: (laissez vide)
+   - Start Command: (laissez vide)
+
+3. **Créez une base PostgreSQL** :
+   - Nom: `rotary-club-db`
+   - Plan: Free
+
+4. **Configurez les variables d'environnement** dans Render
+
+## 🔧 Configuration Locale
+
+### Prérequis
 - .NET 8 SDK
-- PostgreSQL 12+
-- Visual Studio 2022 ou VS Code
+- Docker (optionnel)
+- PostgreSQL (pour développement local)
 
-## ⚙️ Configuration
+### Installation locale
 
-### 1. Cloner le repository
+1. **Cloner le repository** :
+   ```bash
+   git clone https://github.com/DevMick/Web-API-Rotary-club.git
+   cd Web-API-Rotary-club
+   ```
+
+2. **Configurer appsettings.json** :
+   ```json
+   {
+     "ConnectionStrings": {
+       "DefaultConnection": "Host=localhost;Port=5432;Database=rotaryclub;Username=postgres;Password=yourpassword"
+     },
+     "JwtSettings": {
+       "Secret": "your-super-secret-jwt-key-32-characters-minimum"
+     }
+   }
+   ```
+
+3. **Restaurer les packages** :
+   ```bash
+   dotnet restore
+   ```
+
+4. **Appliquer les migrations** :
+   ```bash
+   cd RotaryClubManager.API
+   dotnet ef database update
+   ```
+
+5. **Lancer l'application** :
+   ```bash
+   dotnet run
+   ```
+
+### 🐳 Avec Docker
+
 ```bash
-git clone https://github.com/DevMick/Web-API-Rotary-club.git
-cd Web-API-Rotary-club
+# Build l'image
+docker build -t rotary-club-api .
+
+# Run le container
+docker run -p 8080:8080 \
+  -e ConnectionStrings__DefaultConnection="your-connection-string" \
+  -e JwtSettings__Secret="your-jwt-secret" \
+  rotary-club-api
 ```
-
-### 2. Configuration de la base de données
-1. Copiez `RotaryClubManager.API/appsettings.json.template` vers `RotaryClubManager.API/appsettings.json`
-2. Modifiez les paramètres de connexion PostgreSQL dans `appsettings.json`:
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Host=YOUR_HOST;Port=YOUR_PORT;Database=YOUR_DATABASE;Username=YOUR_USERNAME;Password=YOUR_PASSWORD;SSL Mode=Require"
-  }
-}
-```
-
-### 3. Configuration des services externes
-Configurez les services suivants dans `appsettings.json`:
-
-- **JWT Settings** : Clé secrète pour l'authentification
-- **Email SMTP** : Configuration pour l'envoi d'emails
-- **Meta WhatsApp** : Tokens pour l'intégration WhatsApp
-- **Autres services** : Selon vos besoins
-
-### 4. Migration de la base de données
-```bash
-cd RotaryClubManager.API
-dotnet ef database update
-```
-
-### 5. Lancement de l'application
-```bash
-dotnet run
-```
-
-L'API sera accessible sur `https://localhost:5001` ou `http://localhost:5000`
 
 ## 📚 Documentation API
 
-Une fois l'application lancée, accédez à la documentation Swagger :
-- **Swagger UI** : `https://localhost:5001/swagger`
+- **Production** : `https://your-app-name.onrender.com/swagger`
+- **Local** : `https://localhost:5001/swagger`
+- **Health Check** : `https://your-app-name.onrender.com/health`
 
 ## 🔐 Authentification
 
-L'API utilise JWT pour l'authentification. Voici un exemple de requête de connexion :
-
+### Connexion
 ```bash
-curl -X POST "https://localhost:5001/api/auth/login" \
+curl -X POST "https://your-app-name.onrender.com/api/auth/login" \
   -H "Content-Type: application/json" \
   -d '{
     "email": "admin@example.com",
@@ -86,51 +145,106 @@ curl -X POST "https://localhost:5001/api/auth/login" \
   }'
 ```
 
-## 📖 Exemples d'utilisation
+### Utilisation du token
+```bash
+curl -X GET "https://your-app-name.onrender.com/api/gala-invites/gala/{galaId}" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+## 📖 Exemples d'API
 
 ### Gestion des invités de gala
 
 ```bash
-# Récupérer les invités d'un gala
-curl -X GET "https://localhost:5001/api/gala-invites/gala/{galaId}" \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+# Lister les invités
+GET /api/gala-invites/gala/{galaId}
 
-# Créer un nouvel invité
-curl -X POST "https://localhost:5001/api/gala-invites" \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "galaId": "12345678-1234-1234-1234-123456789abc",
-    "nom_Prenom": "Jean Dupont",
-    "present": false
-  }'
+# Créer un invité
+POST /api/gala-invites
+{
+  "galaId": "uuid",
+  "nom_Prenom": "Jean Dupont",
+  "present": false
+}
+
+# Affecter une table
+POST /api/gala-invites/{inviteId}/affecter-table
+{
+  "tableId": "uuid"
+}
 ```
 
 ## 🏗️ Architecture
 
-Le projet suit une architecture Clean Architecture avec :
+```
+├── RotaryClubManager.API/          # Controllers, DTOs, Middleware
+├── RotaryClubManager.Application/  # Services, Validators
+├── RotaryClubManager.Domain/       # Entities, Interfaces
+├── RotaryClubManager.Infrastructure/ # Data, External Services
+├── Dockerfile                      # Configuration Docker
+├── render.yaml                     # Configuration Render
+└── README.md                       # Documentation
+```
 
-- **RotaryClubManager.API** : Couche de présentation (Controllers, DTOs)
-- **RotaryClubManager.Application** : Couche application (Services, Validators)
-- **RotaryClubManager.Domain** : Couche domaine (Entities, Interfaces)
-- **RotaryClubManager.Infrastructure** : Couche infrastructure (Data, Services externes)
+## 🚀 Commandes Git Setup Complet
+
+```bash
+# 1. Cloner et setup initial
+git clone https://github.com/DevMick/Web-API-Rotary-club.git
+cd Web-API-Rotary-club
+
+# 2. Créer votre propre repository
+git remote remove origin
+git remote add origin https://github.com/VOTRE-USERNAME/Web-API-Rotary-club.git
+
+# 3. Configurer et pousser
+git add .
+git commit -m "Initial setup for Render deployment"
+git push -u origin master
+
+# 4. Déployer sur Render
+# Connectez votre repository GitHub à Render
+# Le déploiement se fera automatiquement !
+```
+
+## 🔒 Variables d'Environnement Render
+
+### Obligatoires (générées automatiquement)
+- `ConnectionStrings__DefaultConnection` - Base de données PostgreSQL
+- `JwtSettings__Secret` - Clé JWT (générée automatiquement)
+
+### À configurer manuellement
+- `Email__SmtpUser` - Votre email SMTP
+- `Email__SmtpPassword` - Mot de passe d'application
+- `Email__FromEmail` - Email expéditeur
+- `Meta__AppId` - ID application Meta
+- `Meta__PhoneNumberId` - ID téléphone WhatsApp
+- `Meta__AccessToken` - Token d'accès Meta
+
+## 🆓 Limites du Plan Gratuit Render
+
+- **Web Service** : 750h/mois (suffisant pour un projet)
+- **PostgreSQL** : 1GB de stockage
+- **Bandwidth** : 100GB/mois
+- **Sleep après 15min** d'inactivité (réveil automatique)
 
 ## 🤝 Contribution
 
 1. Fork le projet
-2. Créez une branche pour votre fonctionnalité (`git checkout -b feature/AmazingFeature`)
-3. Committez vos changements (`git commit -m 'Add some AmazingFeature'`)
-4. Poussez vers la branche (`git push origin feature/AmazingFeature`)
+2. Créez une branche (`git checkout -b feature/AmazingFeature`)
+3. Committez (`git commit -m 'Add AmazingFeature'`)
+4. Poussez (`git push origin feature/AmazingFeature`)
 5. Ouvrez une Pull Request
 
 ## 📝 Licence
 
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+MIT License - voir [LICENSE](LICENSE)
 
 ## 📞 Support
 
-Pour toute question ou support, contactez [votre-email@domain.com]
+- **Issues** : [GitHub Issues](https://github.com/DevMick/Web-API-Rotary-club/issues)
+- **Discussions** : [GitHub Discussions](https://github.com/DevMick/Web-API-Rotary-club/discussions)
 
 ---
 
-**Note importante** : Assurez-vous de ne jamais committer le fichier `appsettings.json` avec vos vraies données de configuration. Utilisez toujours le template et configurez vos variables d'environnement en production.
+⭐ **N'oubliez pas de star le repository si il vous aide !**
